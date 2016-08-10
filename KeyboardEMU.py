@@ -28,6 +28,7 @@ class USBKeyboardInterface(USBInterface):
     def __init__(self, verbose=0):
         self.text = ""
         self.usr_modifiers = 0x00
+        self.count = 0
 
 
         descriptors = {
@@ -74,12 +75,15 @@ class USBKeyboardInterface(USBInterface):
         self.type_letter(letter)
 
     def type_letter(self, letter, modifiers = self.usr_modifiers):
+        if self.count > 11:
+            exit(0)
         data = bytes([ 0, 0, ord(letter) ])
 
         if self.verbose > 2:
             print(self.name, "sending keypress 0x%02x" % ord(letter))
 
         self.endpoint.send(data)
+        count += 1
 
 
 class USBKeyboardDevice(USBDevice):
