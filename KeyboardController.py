@@ -26,6 +26,7 @@ class KeyboardController():
         :param args: modifiers as defined by the strings in modifiers dict.
         :return:
         """
+        self.interface = USBKeyboardInterface()
         hid_arr = []
         modifier = 0x00
 
@@ -33,7 +34,10 @@ class KeyboardController():
             modifier = modifier | modifiers[key]
         for letter in string:
             m,k = GoodFETMAXUSBHID().asc2hid(letter)
-            hid_arr.append(hex(k))
+            if letter.isupper():
+                hid_arr.append(hex(k) | modifiers['LeftShift'])
+            else:
+                hid_arr.append(hex(k))
             hid_arr.append(0x00)
         self.interface.text = hid_arr
         self.interface.usr_modifiers =  modifier
@@ -57,7 +61,7 @@ class KeyboardController():
 
 
 
-m,k = GoodFETMAXUSBHID().asc2hid('y')
+m,k = GoodFETMAXUSBHID().asc2hid('a')
 print k
 print type(k)
 

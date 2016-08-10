@@ -72,9 +72,9 @@ class USBKeyboardInterface(USBInterface):
             return
 
         letter = self.keys.pop(0)
-        self.type_letter(letter)
+        self.type_letter(letter, self.usr_modifiers)
 
-    def type_letter(self, letter, modifiers = self.usr_modifiers):
+    def type_letter(self, letter, modifiers = 0):
         if self.count > 11:
             exit(0)
         data = bytes([ 0, 0, ord(letter) ])
